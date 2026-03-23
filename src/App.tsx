@@ -37,7 +37,7 @@ export default function App() {
   const handleDrinkChange = (drink: string) => {
     setFormData(prev => ({
       ...prev,
-      drinks: prev.drinks.includes(drink) 
+      drinks: prev.drinks.includes(drink)
         ? prev.drinks.filter(d => d !== drink)
         : [...prev.drinks, drink]
     }));
@@ -46,7 +46,7 @@ export default function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg('');
-    
+
     if (!formData.name) {
       setErrorMsg("Пожалуйста, введите ваше имя и фамилию.");
       return;
@@ -79,9 +79,9 @@ export default function App() {
     try {
       // Отправляем GET запрос вместо POST, чтобы избежать возможных блокировок CORS (Preflight)
       const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-      
+
       const response = await fetch(url);
-      
+
       if (response.ok) {
         setIsSuccess(true);
       } else {
@@ -91,7 +91,7 @@ export default function App() {
       }
     } catch (error) {
       console.error("Fetch error:", error);
-      setErrorMsg("Не удалось отправить данные. Проверьте подключение к интернету или попробуйте включить VPN.");
+      setErrorMsg("Не удалось отправить форму.\n Пожалуйста, включите VPN и повторите попытку — это необходимо для работы сервиса.");
     } finally {
       setIsSubmitting(false);
     }
@@ -351,51 +351,51 @@ export default function App() {
           ) : (
             <form className="new-form" onSubmit={handleSubmit}>
               <div className="f-label">Ваше имя и фамилия *</div>
-              <input 
-                className="f-input" 
-                type="text" 
-                value={formData.name} 
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+              <input
+                className="f-input"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
               />
 
               <div className="f-label">Планируете ли Вы присутствовать?</div>
               <label className="f-opt">
-                <input 
-                  type="radio" 
-                  name="att" 
+                <input
+                  type="radio"
+                  name="att"
                   checked={formData.attendance === 'yes'}
-                  onChange={() => setFormData({...formData, attendance: 'yes'})}
+                  onChange={() => setFormData({ ...formData, attendance: 'yes' })}
                 /> Да, с удовольствием
               </label>
               <label className="f-opt">
-                <input 
-                  type="radio" 
-                  name="att" 
+                <input
+                  type="radio"
+                  name="att"
                   checked={formData.attendance === 'no'}
-                  onChange={() => setFormData({...formData, attendance: 'no'})}
+                  onChange={() => setFormData({ ...formData, attendance: 'no' })}
                 /> К сожалению, нет
               </label>
 
               {formData.attendance === 'yes' && (
                 <>
                   <div className="f-label">Если Вы будете со своей парой, укажите его/ее имя и фамилию</div>
-                  <input 
-                    className="f-input" 
-                    type="text" 
-                    value={formData.pairName} 
-                    onChange={(e) => setFormData({...formData, pairName: e.target.value})}
+                  <input
+                    className="f-input"
+                    type="text"
+                    value={formData.pairName}
+                    onChange={(e) => setFormData({ ...formData, pairName: e.target.value })}
                   />
 
                   <div className="f-label">Ваши предпочтения из напитков</div>
                   <div className="f-checks">
                     {['Шампанское', 'Вино', 'Джин', 'Виски', 'Коньяк', 'Водка', 'Не буду пить', '*Свой вариант ответа'].map((drink) => (
                       <label className="f-check" key={drink} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
                           checked={formData.drinks.includes(drink)}
                           onChange={() => handleDrinkChange(drink)}
-                        /> 
+                        />
                         {drink}
                         {drink === 'Не буду пить' && formData.drinks.includes('Не буду пить') && (
                           <span style={{ fontSize: '20px', animation: 'bounce 0.5s' }}>🤡</span>
@@ -404,12 +404,12 @@ export default function App() {
                     ))}
                   </div>
                   {formData.drinks.includes('*Свой вариант ответа') && (
-                    <input 
-                      className="f-input" 
-                      type="text" 
-                      placeholder="Напишите ваш напиток..." 
-                      value={formData.customDrink} 
-                      onChange={(e) => setFormData({...formData, customDrink: e.target.value})}
+                    <input
+                      className="f-input"
+                      type="text"
+                      placeholder="Напишите ваш напиток..."
+                      value={formData.customDrink}
+                      onChange={(e) => setFormData({ ...formData, customDrink: e.target.value })}
                       style={{ marginTop: '8px' }}
                     />
                   )}
