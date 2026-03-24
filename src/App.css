@@ -2,50 +2,50 @@
   position: relative;
   width: 390px;
   background: #fcfae1;
-  font-family: 'Lora', serif;
+  font-family: "Lora", serif;
 }
 
 .absolute-girl-text {
   position: absolute;
-  top: 255px;
-  right: 25px;
-  font-family: 'Caveat', cursive;
+  top: 310px;
+  right: 65px;
+  font-family: "Caveat", cursive;
   font-size: 20px;
-  color: #3E3A34;
+  color: #3e3a34;
   font-weight: 700;
   z-index: 11;
 }
 
 .absolute-girl-img {
   position: absolute;
-  top: 200px;
-  right: -55px;
+  top: 306px;
+  right: -10px;
   width: 250px;
   height: auto;
-  z-index: 10;
+  z-index: 12;
   pointer-events: none;
 }
 
 .absolute-boy-text {
   position: absolute;
-  top: 320px;
+  top: 400px;
   left: 15px;
   width: 170px;
   text-align: center;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 20px;
-  color: #3E3A34;
+  color: #3e3a34;
   font-weight: 700;
   z-index: 11;
 }
 
 .absolute-boy-img {
   position: absolute;
-  top: 366px;
+  top: 432px;
   left: -20px;
   width: 250px;
   height: auto;
-  z-index: 12;
+  z-index: 10;
   pointer-events: none;
 }
 
@@ -74,9 +74,9 @@
   top: 135px;
   left: 24px;
   width: 342px;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 32px;
-  color: #3E3A34;
+  color: #3e3a34;
   text-align: center;
   font-weight: normal;
   letter-spacing: 3px;
@@ -87,7 +87,7 @@
   top: 165px;
   left: 24px;
   width: 342px;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 50px;
   color: #c6215d;
   text-align: center;
@@ -104,7 +104,7 @@
 .new-bar span {
   position: absolute;
   top: 9px;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 20px;
   color: #ffffff;
 }
@@ -134,7 +134,7 @@
   left: 25px;
   width: 342px;
   font-size: 46px;
-  color: #31323A;
+  color: #31323a;
   letter-spacing: 2px;
   font-weight: 500;
 }
@@ -144,7 +144,7 @@
   top: 122px;
   left: 25px;
   width: 342px;
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-size: 122px;
   color: #c6215d;
   text-align: right;
@@ -160,7 +160,7 @@
 }
 
 .date-big {
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 68px;
   color: #c6215d;
   font-weight: 500;
@@ -180,9 +180,9 @@
 }
 
 .cal-month {
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-size: 58px;
-  color: #3E3E47;
+  color: #3e3e47;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -192,16 +192,16 @@
   grid-template-columns: repeat(7, 1fr);
   gap: 12px;
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
   font-size: 20px;
-  color: #3D3833;
+  color: #3d3833;
   width: 100%;
 }
 
 .cal-day {
-  font-family: 'Lora', serif;
+  font-family: "Lora", serif;
   font-size: 14px;
-  color: #87878D;
+  color: #87878d;
   margin-bottom: 6px;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .highlight::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 65%;
   left: 51%;
@@ -234,9 +234,9 @@
 }
 
 .loc-title {
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-size: 92px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   width: 100%;
 }
@@ -244,7 +244,7 @@
 .loc-sub {
   font-size: 46px;
   font-weight: 600;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   line-height: 1.1;
   letter-spacing: 2px;
@@ -261,7 +261,9 @@
   width: 100%;
   margin-bottom: 18px;
   border-radius: 20px;
-  box-shadow: 0 12px 24px rgba(198, 33, 93, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 12px 24px rgba(198, 33, 93, 0.08),
+    0 4px 8px rgba(0, 0, 0, 0.04);
 }
 
 .main-photo {
@@ -274,14 +276,14 @@
 .loc-name {
   font-size: 24px;
   font-weight: 600;
-  color: #3A3740;
+  color: #3a3740;
   text-align: center;
   letter-spacing: 1px;
 }
 
 .loc-addr {
   font-size: 16px;
-  color: #5D5860;
+  color: #5d5860;
   text-align: center;
   line-height: 1.35;
 }
@@ -302,7 +304,7 @@
 }
 
 .loc-btn {
-  background: linear-gradient(135deg, #c6215d 0%, #D83C74 100%);
+  background: linear-gradient(135deg, #c6215d 0%, #d83c74 100%);
   border: none;
   padding: 16px 18px;
   width: 100%;
@@ -310,7 +312,9 @@
   cursor: pointer;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(198, 33, 93, 0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .loc-btn:active {
@@ -369,15 +373,15 @@
 
 .tl-sub {
   position: absolute;
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-size: 22px;
-  color: #464A55;
+  color: #464a55;
 }
 
 .tl-text {
   position: absolute;
   font-size: 18px;
-  color: #3B3D46;
+  color: #3b3d46;
   line-height: 1.2;
   width: 170px;
 }
@@ -448,7 +452,7 @@
   left: 2px;
   width: 18px;
   height: 18px;
-  border: 1px solid #4B4F58;
+  border: 1px solid #4b4f58;
   border-radius: 50%;
 }
 
@@ -458,7 +462,7 @@
   left: 11px;
   width: 18px;
   height: 18px;
-  border: 1px solid #4B4F58;
+  border: 1px solid #4b4f58;
   border-radius: 50%;
 }
 
@@ -506,7 +510,7 @@
 .hl4 {
   top: 551px;
   left: 152px;
-  background-color: #71757E;
+  background-color: #71757e;
 }
 
 /* DRESS CODE */
@@ -525,9 +529,9 @@
 }
 
 .dc-text {
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 24px;
-  color: #4A4D56;
+  color: #4a4d56;
   text-align: center;
   line-height: 1.28;
   margin-bottom: 22px;
@@ -540,7 +544,7 @@
   padding: 0 16px;
 }
 
-.palette>div {
+.palette > div {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -548,35 +552,35 @@
   transition: transform 0.3s ease;
 }
 
-.palette>div:hover {
+.palette > div:hover {
   transform: scale(1.15);
 }
 
 /* WISHES */
 .wishes {
-  background: linear-gradient(135deg, #c6215d 0%, #D83C74 100%);
+  background: linear-gradient(135deg, #c6215d 0%, #d83c74 100%);
   padding: 60px 12px 50px 12px;
 }
 
 .wish-title {
   font-size: 54px;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   margin-bottom: 18px;
 }
 
 .wish-line {
   height: 1px;
-  background-color: #DADBE0;
+  background-color: #dadbe0;
   width: 170px;
   margin: 0 auto;
   margin-bottom: 18px;
 }
 
 .wish-text {
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 24px;
-  color: #F4F4F7;
+  color: #f4f4f7;
   font-weight: 600;
   line-height: 1.22;
   margin-bottom: 18px;
@@ -608,7 +612,7 @@
 }
 
 .gbWRC {
-  background: linear-gradient(135deg, #c6215d 0%, #D83C74 100%);
+  background: linear-gradient(135deg, #c6215d 0%, #d83c74 100%);
   padding: 20px 14px;
   width: 100%;
   border-radius: 20px;
@@ -621,7 +625,7 @@
 
 .paper-top-line {
   height: 1px;
-  background-color: #ECECEF;
+  background-color: #ececef;
   width: 100%;
 }
 
@@ -631,7 +635,7 @@
   align-items: center;
   padding: 8px 16px;
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: "Cormorant Garamond", serif;
 }
 
 .cd-group {
@@ -648,7 +652,7 @@
 
 .cd-label {
   font-size: 14px;
-  font-family: 'Lora', serif;
+  font-family: "Lora", serif;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -660,7 +664,7 @@
 
 .paper-bottom-line {
   height: 1px;
-  background-color: #CFCFD4;
+  background-color: #cfcfd4;
   width: 100%;
 }
 
@@ -688,7 +692,7 @@
   top: 131px;
   left: 24px;
   width: 342px;
-  font-family: 'Great Vibes', cursive;
+  font-family: "Great Vibes", cursive;
   font-size: 122px;
   color: #c6215d;
   text-align: right;
@@ -700,7 +704,7 @@
   top: 250px;
   left: 10px;
   width: 370px;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 32px;
   color: #555963;
   line-height: 1.25;
@@ -719,11 +723,11 @@
 .rsvp-line {
   flex: 1;
   height: 1px;
-  background-color: #8A8E96;
+  background-color: #8a8e96;
 }
 
 .rsvp-date-big {
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   font-size: 76px;
   font-weight: 500;
   color: #c6215d;
@@ -744,14 +748,16 @@
   gap: 20px;
   width: 100%;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.05),
+    0 1px 3px rgba(0, 0, 0, 0.02);
   border: 1px solid rgba(198, 33, 93, 0.1);
 }
 
 .f-label {
   font-size: 15px;
   font-weight: 600;
-  color: #3E3E47;
+  color: #3e3e47;
   letter-spacing: 0.5px;
 }
 
@@ -774,12 +780,13 @@
   box-shadow: 0 0 0 3px rgba(198, 33, 93, 0.1);
 }
 
-.f-opt, .f-check {
+.f-opt,
+.f-check {
   display: flex;
   align-items: center;
   gap: 12px;
   font-size: 16px;
-  color: #4C4339;
+  color: #4c4339;
   cursor: pointer;
   padding: 10px 14px;
   border-radius: 10px;
@@ -788,7 +795,8 @@
   border: 1px solid transparent;
 }
 
-.f-opt:hover, .f-check:hover {
+.f-opt:hover,
+.f-check:hover {
   background-color: #f0f0f4;
 }
 
@@ -808,17 +816,19 @@
 }
 
 .f-submit {
-  background: linear-gradient(135deg, #c6215d 0%, #D83C74 100%);
+  background: linear-gradient(135deg, #c6215d 0%, #d83c74 100%);
   border: none;
   color: #ffffff;
   padding: 16px;
   font-size: 18px;
   font-weight: 600;
-  font-family: 'Lora', serif;
+  font-family: "Lora", serif;
   text-align: center;
   cursor: pointer;
   border-radius: 12px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   box-shadow: 0 6px 15px rgba(198, 33, 93, 0.25);
   margin-top: 10px;
 }

@@ -2,16 +2,18 @@ import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import './App.css';
 import { MapPin, ChefHat, Sparkles } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 function ScrollFade({ children, delay = 0, yOffset = 40 }: { children: ReactNode, delay?: number, yOffset?: number }) {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: yOffset }}
+      initial={{ opacity: 0, y: prefersReducedMotion ? 0 : yOffset }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.7, delay, ease: "easeOut" }}
-      style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+      transition={{ duration: prefersReducedMotion ? 0.35 : 0.7, delay, ease: "easeOut" }}
+      style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', willChange: 'opacity, transform' }}
     >
       {children}
     </motion.div>
