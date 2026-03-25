@@ -33,6 +33,15 @@ const MAP_URL =
 const CUSTOM_DRINK_OPTION = "*Свой вариант ответа";
 const NO_ALCOHOL_OPTION = "Не буду пить";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mpqozrap";
+const PRELOAD_IMAGES = [
+  "/images/1.png",
+  "/images/2.png",
+  "/images/3.png",
+  "/images/4.png",
+  "/images/5.jpg",
+  "/images/6.jpg",
+];
+const PRELOAD_AUDIO = "/images/sound.MP3";
 const INITIAL_FORM_DATA: FormData = {
   name: "",
   attendance: "yes",
@@ -325,10 +334,78 @@ function useFontReadiness() {
   return fontsReady;
 }
 
+function preloadImage(src: string) {
+  return new Promise<void>((resolve) => {
+    const image = new Image();
+    image.onload = () => resolve();
+    image.onerror = () => resolve();
+    image.src = src;
+  });
+}
+
+function preloadAudio(src: string) {
+  return new Promise<void>((resolve) => {
+    const audio = new Audio();
+    const cleanup = () => {
+      audio.removeEventListener("canplaythrough", onReady);
+      audio.removeEventListener("loadeddata", onReady);
+      audio.removeEventListener("error", onReady);
+    };
+    const onReady = () => {
+      cleanup();
+      resolve();
+    };
+
+    audio.preload = "auto";
+    audio.addEventListener("canplaythrough", onReady, { once: true });
+    audio.addEventListener("loadeddata", onReady, { once: true });
+    audio.addEventListener("error", onReady, { once: true });
+    audio.src = src;
+    audio.load();
+  });
+}
+
+function useMediaReadiness() {
+  const [mediaReady, setMediaReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const preloadAssets = async () => {
+      const timeoutMs = 6000;
+      const withTimeout = (promise: Promise<void>) =>
+        Promise.race([
+          promise,
+          new Promise<void>((resolve) => {
+            window.setTimeout(resolve, timeoutMs);
+          }),
+        ]);
+
+      await Promise.allSettled([
+        ...PRELOAD_IMAGES.map((src) => withTimeout(preloadImage(src))),
+        withTimeout(preloadAudio(PRELOAD_AUDIO)),
+      ]);
+
+      if (isMounted) {
+        setMediaReady(true);
+      }
+    };
+
+    void preloadAssets();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return mediaReady;
+}
+
 export default function App() {
   const prefersReducedMotion = useReducedMotion();
   const audioRef = useRef<HTMLAudioElement>(null);
   const fontsReady = useFontReadiness();
+  const mediaReady = useMediaReadiness();
 
   const [entered, setEntered] = useState(false);
   const [soundState, setSoundState] = useState<SoundState>("idle");
@@ -336,6 +413,7 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const canEnterInvitation = fontsReady && mediaReady;
 
   useEffect(() => {
     document.body.style.overflowY = entered ? "auto" : "hidden";
@@ -366,7 +444,7 @@ export default function App() {
   };
 
   const handleEnterInvitation = () => {
-    if (!fontsReady) {
+    if (!canEnterInvitation) {
       return;
     }
 
@@ -522,8 +600,8 @@ export default function App() {
               <motion.button
                 className="preview-text-button"
                 onClick={handleEnterInvitation}
-                disabled={!fontsReady}
-                aria-busy={!fontsReady}
+                disabled={!canEnterInvitation}
+                aria-busy={!canEnterInvitation}
                 whileHover={prefersReducedMotion ? undefined : { y: -2 }}
                 whileTap={prefersReducedMotion ? undefined : { scale: 0.985 }}
                 transition={{ duration: 0.2, ease: "easeOut" }}
@@ -538,7 +616,7 @@ export default function App() {
                     ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  Открыть приглашение
+                  {canEnterInvitation ? "Открыть приглашение" : "Загружаем..."}
                 </motion.span>
               </motion.button>
             </motion.div>

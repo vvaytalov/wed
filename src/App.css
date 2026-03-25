@@ -260,8 +260,8 @@
 .hero-img {
   position: absolute;
   top: 36px;
-  left: 0;
-  width: 100%;
+  left: 1px;
+  width: 101%;
   height: 99px;
   object-fit: cover;
 }
@@ -736,7 +736,7 @@
   padding: 0 16px;
 }
 
-.palette > div {
+.palette>div {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -744,7 +744,7 @@
   transition: transform 0.3s ease;
 }
 
-.palette > div:hover {
+.palette>div:hover {
   transform: scale(1.15);
 }
 
@@ -1082,6 +1082,7 @@
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
