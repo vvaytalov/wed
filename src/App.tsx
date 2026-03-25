@@ -457,6 +457,15 @@ export default function App() {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleAttendanceChange = (attendance: Attendance) => {
+    setFormData((prev) => ({
+      ...prev,
+      attendance,
+      drinks: attendance === "no" ? [] : prev.drinks,
+      customDrink: attendance === "no" ? "" : prev.customDrink,
+    }));
+  };
+
   const tryPlaySound = async () => {
     const audio = audioRef.current;
 
@@ -926,7 +935,7 @@ export default function App() {
                           type="radio"
                           name="attendance"
                           checked={formData.attendance === "yes"}
-                          onChange={() => setField("attendance", "yes")}
+                          onChange={() => handleAttendanceChange("yes")}
                         />
                         Да, с удовольствием
                       </label>
@@ -935,7 +944,7 @@ export default function App() {
                           type="radio"
                           name="attendance"
                           checked={formData.attendance === "no"}
-                          onChange={() => setField("attendance", "no")}
+                          onChange={() => handleAttendanceChange("no")}
                         />
                         К сожалению, нет
                       </label>

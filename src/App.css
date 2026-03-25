@@ -253,6 +253,7 @@
   max-width: 390px;
   background: #fcfae1;
   font-family: "Lora", serif;
+  overflow: clip;
 }
 
 @media (min-width: 1024px) {
@@ -1190,7 +1191,8 @@
 
 @media (max-width: 768px) {
   .mobile-layout {
-    max-width: none;
+    max-width: 100%;
+    margin: 0;
   }
 
   .success-figure {
@@ -1206,7 +1208,76 @@
   }
 }
 
+@media (max-width: 420px) {
+  .hero-img {
+    left: 0;
+    width: 100%;
+  }
+
+  .hero-title {
+    top: 132px;
+    left: 18px;
+    width: calc(100% - 36px);
+    font-size: clamp(26px, 8.5vw, 32px);
+    letter-spacing: 2px;
+  }
+
+  .hero-names {
+    top: 172px;
+    left: 18px;
+    width: calc(100% - 36px);
+    font-size: clamp(40px, 13.5vw, 50px);
+    line-height: 0.95;
+  }
+
+  .absolute-girl-text {
+    right: 56px;
+    font-size: 18px;
+  }
+
+  .absolute-girl-img {
+    right: -6px;
+    width: min(60vw, 230px);
+  }
+
+  .absolute-boy-text {
+    left: 8px;
+    width: 150px;
+    font-size: 18px;
+  }
+
+  .absolute-boy-img {
+    left: -26px;
+    width: min(84vw, 300px);
+  }
+}
+
 @media (max-width: 360px) {
+  .new-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+  }
+
+  .new-bar span {
+    position: static;
+    top: auto;
+    font-size: 18px;
+  }
+
+  .date-row {
+    width: calc(100% - 50px);
+  }
+
+  .success-figure-left {
+    left: -56px;
+  }
+
+  .success-figure-right {
+    right: -56px;
+  }
+
   .success-scene {
     min-height: 330px;
   }
