@@ -40,6 +40,8 @@ const PRELOAD_IMAGES = [
   "/images/4.png",
   "/images/5.jpg",
   "/images/6.jpg",
+  "/images/ken.png",
+  "/images/barby.png",
 ];
 const PRELOAD_AUDIO = "/images/sound.MP3";
 const FONT_PRELOAD_SAMPLE =
