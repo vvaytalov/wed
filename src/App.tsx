@@ -42,6 +42,19 @@ const PRELOAD_IMAGES = [
   "/images/6.jpg",
 ];
 const PRELOAD_AUDIO = "/images/sound.MP3";
+const FONT_PRELOAD_SAMPLE =
+  "Мы ждем вас на свадьбе 25.07.2026 We Meet We Party Из-за любви";
+const FONT_VARIANTS_TO_PRELOAD = [
+  '400 1em "Caveat"',
+  '500 1em "Caveat"',
+  '600 1em "Caveat"',
+  '700 1em "Caveat"',
+  '500 1em "Cormorant Garamond"',
+  '400 1em "Great Vibes"',
+  '400 1em "Lora"',
+  '500 1em "Lora"',
+  '600 1em "Lora"',
+];
 const INITIAL_FORM_DATA: FormData = {
   name: "",
   attendance: "yes",
@@ -310,12 +323,11 @@ function useFontReadiness() {
       }
 
       try {
-        await Promise.all([
-          document.fonts.load('1em "Caveat"'),
-          document.fonts.load('1em "Cormorant Garamond"'),
-          document.fonts.load('1em "Great Vibes"'),
-          document.fonts.load('1em "Lora"'),
-        ]);
+        await Promise.all(
+          FONT_VARIANTS_TO_PRELOAD.map((font) =>
+            document.fonts.load(font, FONT_PRELOAD_SAMPLE),
+          ),
+        );
         await document.fonts.ready;
       } finally {
         if (isMounted) {
@@ -399,6 +411,22 @@ function useMediaReadiness() {
   }, []);
 
   return mediaReady;
+}
+
+function FontPreloadProbe() {
+  return (
+    <div className="font-preload-probe" aria-hidden="true">
+      <span className="font-probe caveat-400">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe caveat-500">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe caveat-600">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe caveat-700">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe cormorant-500">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe great-vibes-400">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe lora-400">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe lora-500">{FONT_PRELOAD_SAMPLE}</span>
+      <span className="font-probe lora-600">{FONT_PRELOAD_SAMPLE}</span>
+    </div>
+  );
 }
 
 export default function App() {
@@ -546,6 +574,7 @@ export default function App() {
 
   return (
     <div className="experience-shell">
+      <FontPreloadProbe />
       <audio ref={audioRef} preload="auto" loop>
         <source src="/images/sound.MP3" type="audio/mpeg" />
       </audio>

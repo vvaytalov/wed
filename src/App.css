@@ -12,6 +12,64 @@
   will-change: opacity, transform;
 }
 
+.font-preload-probe {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.font-probe {
+  display: block;
+}
+
+.font-probe.caveat-400 {
+  font-family: "Caveat", cursive;
+  font-weight: 400;
+}
+
+.font-probe.caveat-500 {
+  font-family: "Caveat", cursive;
+  font-weight: 500;
+}
+
+.font-probe.caveat-600 {
+  font-family: "Caveat", cursive;
+  font-weight: 600;
+}
+
+.font-probe.caveat-700 {
+  font-family: "Caveat", cursive;
+  font-weight: 700;
+}
+
+.font-probe.cormorant-500 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+}
+
+.font-probe.great-vibes-400 {
+  font-family: "Great Vibes", cursive;
+  font-weight: 400;
+}
+
+.font-probe.lora-400 {
+  font-family: "Lora", serif;
+  font-weight: 400;
+}
+
+.font-probe.lora-500 {
+  font-family: "Lora", serif;
+  font-weight: 500;
+}
+
+.font-probe.lora-600 {
+  font-family: "Lora", serif;
+  font-weight: 600;
+}
+
 .preview-screen-minimal {
   position: relative;
   min-height: 100svh;
