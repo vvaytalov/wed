@@ -1,8 +1,201 @@
-import { useState, useEffect } from "react";
-import type { ReactNode } from "react";
+﻿import { useEffect, useRef, useState } from "react";
+import type { FormEvent, ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ChefHat, MapPin, Music2, Sparkles } from "lucide-react";
 import "./App.css";
-import { MapPin, ChefHat, Sparkles } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+
+type Attendance = "yes" | "no";
+type SoundState = "idle" | "playing" | "blocked";
+
+type FormData = {
+  name: string;
+  attendance: Attendance;
+  drinks: string[];
+  customDrink: string;
+};
+
+type TimelineItem = {
+  time: string;
+  label: string;
+  description: ReactNode;
+  icon: ReactNode;
+  timeClassName: string;
+  iconClassName: string;
+  subtitleClassName: string;
+  descriptionClassName: string;
+  lineClassName: string;
+};
+
+const WEDDING_DATE = new Date("2026-07-25T00:00:00").getTime();
+const RSVP_DEADLINE = "01.06.2026";
+const MAP_URL =
+  "https://yandex.ru/maps/org/iz_za_lyubvi/57220165080/?ll=37.599355%2C55.468076&z=17";
+const CUSTOM_DRINK_OPTION = "*Свой вариант ответа";
+const NO_ALCOHOL_OPTION = "Не буду пить";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mpqozrap";
+const INITIAL_FORM_DATA: FormData = {
+  name: "",
+  attendance: "yes",
+  drinks: [],
+  customDrink: "",
+};
+
+const INVITATION_LINES = ["Вы приглашены", "Вы приглашены", "Вы приглашены"];
+const DRINK_OPTIONS = [
+  "Шампанское",
+  "Вино",
+  "Джин",
+  "Виски",
+  "Коньяк",
+  "Водка",
+  NO_ALCOHOL_OPTION,
+  CUSTOM_DRINK_OPTION,
+];
+const PALETTE_COLORS = [
+  "#D8C5AD",
+  "#D9BFB8",
+  "#A8B295",
+  "#9A8C80",
+  "#7A5D4A",
+  "#6A6C44",
+  "#5A5046",
+  "#000000",
+];
+const WISHES = [
+  <>
+    Хотим, чтобы все гости могли отдохнуть
+    <br />
+    по-взрослому, поэтому говорим
+    <br />
+    заранее спасибо за понимание:
+    <br />
+    праздник для гостей 12+.
+  </>,
+  <>
+    Будем очень признательны, если Вы
+    <br />
+    воздержитесь от криков «Горько». Ведь
+    <br />
+    поцелуй это знак выражения чувств, и
+    <br />
+    он не может быть по заказу.
+  </>,
+  <>
+    Лучшая поддержка для нас это ваши
+    <br />
+    искренние пожелания и лучезарные
+    <br />
+    улыбки, остальное можно поместить в
+    <br />
+    конверт.
+  </>,
+];
+const CALENDAR_WEEK_DAYS = ["ПН", "ВТ", "СР", "ЧТ", "ПТ", "СБ", "ВС"];
+const CALENDAR_DAYS = [
+  "",
+  "",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+];
+
+const TIMELINE_ITEMS: TimelineItem[] = [
+  {
+    time: "12:30",
+    label: "We Meet",
+    description: (
+      <>
+        Сбор гостей у
+        <br />
+        ЗАГСа
+      </>
+    ),
+    icon: <MapPin size={24} color="#4B4F58" />,
+    timeClassName: "t1",
+    iconClassName: "i1",
+    subtitleClassName: "s1",
+    descriptionClassName: "d1",
+    lineClassName: "hl1",
+  },
+  {
+    time: "13:15",
+    label: "We Do",
+    description: (
+      <>
+        Церемония
+        <br />
+        регистрации
+      </>
+    ),
+    icon: (
+      <div className="rings">
+        <div className="ring1" />
+        <div className="ring2" />
+      </div>
+    ),
+    timeClassName: "t2",
+    iconClassName: "i2",
+    subtitleClassName: "s2",
+    descriptionClassName: "d2",
+    lineClassName: "hl2",
+  },
+  {
+    time: "14:00",
+    label: "We Party",
+    description: "Начало фуршета",
+    icon: <ChefHat size={24} color="#4B4F58" />,
+    timeClassName: "t3",
+    iconClassName: "i3",
+    subtitleClassName: "s3",
+    descriptionClassName: "d3",
+    lineClassName: "hl3",
+  },
+  {
+    time: "22:00",
+    label: "The End",
+    description: (
+      <>
+        Завершение
+        <br />
+        вечера
+      </>
+    ),
+    icon: <Sparkles size={24} color="#4B4F58" />,
+    timeClassName: "t4",
+    iconClassName: "i4",
+    subtitleClassName: "s4",
+    descriptionClassName: "d4",
+    lineClassName: "hl4",
+  },
+];
 
 function ScrollFade({
   children,
@@ -25,611 +218,634 @@ function ScrollFade({
         delay,
         ease: "easeOut",
       }}
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        willChange: "opacity, transform",
-      }}
+      className="scroll-fade"
     >
       {children}
     </motion.div>
   );
 }
 
-export default function App() {
-  const [timeLeft, setTimeLeft] = useState({
-    days: "00",
-    hours: "00",
-    minutes: "00",
-    seconds: "00",
-  });
+function getTimeLeft(targetDate: number) {
+  const difference = targetDate - Date.now();
 
-  const [formData, setFormData] = useState({
-    name: "",
-    attendance: "yes",
-    pairName: "",
-    drinks: [] as string[],
-    customDrink: "",
-  });
+  if (difference <= 0) {
+    return { days: "00", hours: "00", minutes: "00", seconds: "00" };
+  }
+
+  return {
+    days: String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(2, "0"),
+    hours: String(Math.floor((difference / (1000 * 60 * 60)) % 24)).padStart(
+      2,
+      "0",
+    ),
+    minutes: String(Math.floor((difference / (1000 * 60)) % 60)).padStart(2, "0"),
+    seconds: String(Math.floor((difference / 1000) % 60)).padStart(2, "0"),
+  };
+}
+
+function getPreferredDrinks(formData: FormData) {
+  return formData.drinks.map((drink) =>
+    drink === CUSTOM_DRINK_OPTION && formData.customDrink.trim()
+      ? `Другое: ${formData.customDrink.trim()}`
+      : drink,
+  );
+}
+
+function CountdownCard() {
+  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(WEDDING_DATE));
+
+  useEffect(() => {
+    const timerId = window.setInterval(() => {
+      setTimeLeft(getTimeLeft(WEDDING_DATE));
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, []);
+
+  return (
+    <div className="cd-paper">
+      <div className="paper-top-line" />
+      <div className="cd-values">
+        {[
+          { label: "дни", value: timeLeft.days },
+          { label: "часы", value: timeLeft.hours },
+          { label: "минуты", value: timeLeft.minutes },
+          { label: "сек", value: timeLeft.seconds },
+        ].map((item, index) => (
+          <div className="cd-fragment" key={item.label}>
+            <div className="cd-group">
+              <span className="cd-val">{item.value}</span>
+              <span className="cd-label">{item.label}</span>
+            </div>
+            {index < 3 && <span className="cd-sep">:</span>}
+          </div>
+        ))}
+      </div>
+      <div className="paper-bottom-line" />
+    </div>
+  );
+}
+
+function useFontReadiness() {
+  const [fontsReady, setFontsReady] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadFonts = async () => {
+      if (typeof document === "undefined" || !("fonts" in document)) {
+        if (isMounted) {
+          setFontsReady(true);
+        }
+        return;
+      }
+
+      try {
+        await Promise.all([
+          document.fonts.load('1em "Caveat"'),
+          document.fonts.load('1em "Cormorant Garamond"'),
+          document.fonts.load('1em "Great Vibes"'),
+          document.fonts.load('1em "Lora"'),
+        ]);
+        await document.fonts.ready;
+      } finally {
+        if (isMounted) {
+          setFontsReady(true);
+        }
+      }
+    };
+
+    void loadFonts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  return fontsReady;
+}
+
+export default function App() {
+  const prefersReducedMotion = useReducedMotion();
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const fontsReady = useFontReadiness();
+
+  const [entered, setEntered] = useState(false);
+  const [soundState, setSoundState] = useState<SoundState>("idle");
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleDrinkChange = (drink: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      drinks: prev.drinks.includes(drink)
-        ? prev.drinks.filter((d) => d !== drink)
-        : [...prev.drinks, drink],
-    }));
+  useEffect(() => {
+    document.body.style.overflowY = entered ? "auto" : "hidden";
+
+    return () => {
+      document.body.style.overflowY = "auto";
+    };
+  }, [entered]);
+
+  const setField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const tryPlaySound = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) {
+      return;
+    }
+
+    try {
+      audio.currentTime = 0;
+      await audio.play();
+      setSoundState("playing");
+    } catch {
+      setSoundState("blocked");
+    }
+  };
+
+  const handleEnterInvitation = () => {
+    if (!fontsReady) {
+      return;
+    }
+
+    setEntered(true);
+    void tryPlaySound();
+  };
+
+  const handleSoundToggle = async () => {
+    const audio = audioRef.current;
+
+    if (!audio) {
+      return;
+    }
+
+    if (audio.paused) {
+      await tryPlaySound();
+      return;
+    }
+
+    audio.pause();
+    setSoundState("idle");
+  };
+
+  const handleDrinkToggle = (drink: string) => {
+    setFormData((prev) => {
+      const drinks = prev.drinks.includes(drink)
+        ? prev.drinks.filter((item) => item !== drink)
+        : [...prev.drinks, drink];
+
+      return {
+        ...prev,
+        drinks,
+        customDrink: drinks.includes(CUSTOM_DRINK_OPTION) ? prev.customDrink : "",
+      };
+    });
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setErrorMsg("");
 
-    if (!formData.name) {
+    if (!formData.name.trim()) {
       setErrorMsg("Пожалуйста, введите ваше имя и фамилию.");
       return;
     }
 
     setIsSubmitting(true);
 
-    const token = import.meta.env.VITE_TG_BOT_TOKEN;
-    const chatId = import.meta.env.VITE_TG_CHAT_ID;
-
-    if (!token || !chatId || token === "YOUR_BOT_TOKEN_HERE") {
-      setErrorMsg(
-        "Вам необходимо настроить Telegram-бота в файле .env (см. инструкцию).",
-      );
-      setIsSubmitting(false);
-      return;
-    }
-
-    let finalDrinks = [...formData.drinks];
-    if (
-      finalDrinks.includes("*Свой вариант ответа") &&
-      formData.customDrink.trim()
-    ) {
-      finalDrinks = finalDrinks.map((d) =>
-        d === "*Свой вариант ответа" ? `Другое: ${formData.customDrink}` : d,
-      );
-    }
-
-    const message = `
-🎉 Новая анкета гостя!
-👤 Имя: ${formData.name}
-💌 Присутствие: ${formData.attendance === "yes" ? "✅ Да, с удовольствием" : "❌ К сожалению, нет"}
-👫 Пара: ${formData.pairName || "Без пары"}
-🍷 Напитки: ${finalDrinks.length > 0 ? finalDrinks.join(", ") : "Не выбрано"}
-    `;
-
     try {
-      // Отправляем GET запрос вместо POST, чтобы избежать возможных блокировок CORS (Preflight)
-      const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+      const trimmedName = formData.name.trim();
+      const attendanceText =
+        formData.attendance === "yes"
+          ? "Да, с удовольствием"
+          : "К сожалению, нет";
+      const drinks = getPreferredDrinks(formData);
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: trimmedName,
+          attendance: attendanceText,
+          drinks: drinks.length > 0 ? drinks.join(", ") : "Не выбрано",
+        }),
+      });
 
-      const response = await fetch(url);
+      if (!response.ok) {
+        let message = "Не удалось отправить форму. Попробуйте чуть позже.";
 
-      if (response.ok) {
-        setIsSuccess(true);
-      } else {
-        const errorData = await response.json();
-        console.error("Telegram API Error:", errorData);
-        setErrorMsg(
-          `Ошибка Telegram: ${errorData.description || "Проверьте токен и chat_id"}`,
-        );
+        try {
+          const errorData = (await response.json()) as {
+            errors?: Array<{ message?: string }>;
+          };
+          message = errorData.errors?.[0]?.message ?? message;
+        } catch {
+          // Keep default error text if response is not JSON.
+        }
+
+        setErrorMsg(message);
+        return;
       }
+
+      setIsSuccess(true);
     } catch (error) {
-      console.error("Fetch error:", error);
+      console.error("Formspree request failed", error);
       setErrorMsg(
-        "Не удалось отправить форму.\n Пожалуйста, включите VPN и повторите попытку — это необходимо для работы сервиса.",
+        "Не удалось отправить форму. Проверьте подключение к сети и повторите попытку.",
       );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  useEffect(() => {
-    const targetDate = new Date("2026-07-25T00:00:00").getTime();
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: String(Math.floor(difference / (1000 * 60 * 60 * 24))).padStart(
-            2,
-            "0",
-          ),
-          hours: String(
-            Math.floor((difference / (1000 * 60 * 60)) % 24),
-          ).padStart(2, "0"),
-          minutes: String(Math.floor((difference / 1000 / 60) % 60)).padStart(
-            2,
-            "0",
-          ),
-          seconds: String(Math.floor((difference / 1000) % 60)).padStart(
-            2,
-            "0",
-          ),
-        });
-      } else {
-        setTimeLeft({ days: "00", hours: "00", minutes: "00", seconds: "00" });
-      }
-    };
-
-    updateTimer();
-    const timerId = setInterval(updateTimer, 1000);
-    return () => clearInterval(timerId);
-  }, []);
-
-  const onClick = () => {
-    window.open(
-      "https://yandex.ru/maps/org/iz_za_lyubvi/57220165080/?ll=37.599355%2C55.468076&z=17",
-      "_blank",
-    );
+  const openLocation = () => {
+    window.open(MAP_URL, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="mobile-layout">
-      {/* HERO SECTION */}
-      <section className="hero">
-        <img src="/images/3.png" alt="Hero top" className="hero-img" />
-        <h2 className="hero-title">наконец-то</h2>
-        <h1 className="hero-names">МЫ ЖЕНИМСЯ</h1>
+    <div className="experience-shell">
+      <audio ref={audioRef} preload="auto" loop>
+        <source src="/images/sound.MP3" type="audio/mpeg" />
+      </audio>
 
-        {/* Absolute 1-in-1 layout based on provided image */}
-        <div className="absolute-girl-text">- давай (хихик)</div>
-        <img src="/images/2.png" alt="girl" className="absolute-girl-img" />
-
-        <div className="absolute-boy-text">
-          - малышка, тебе винду
-          <br />
-          переустановить ?
-        </div>
-        <img
-          src="/images/1.png"
-          alt="boy"
-          className="absolute-boy-img boy-flip"
-        />
-      </section>
-
-      {/* NEW BAR */}
-      <motion.div
-        className="new-bar"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        <span className="inv-1">Вы приглашены</span>
-        <span className="inv-2">Вы приглашены</span>
-        <span className="inv-3">Вы приглашены</span>
-      </motion.div>
-
-      {/* DATE SECTION */}
-      <section className="date-section">
-        <ScrollFade>
-          <div className="date-title">МЫ ЖДЁМ</div>
-          <div className="date-month">Вас</div>
-          <div className="date-row">
-            <div className="date-big">25.07.2026</div>
-          </div>
-          <div className="new-cal">
-            <div className="cal-month">Июль</div>
-            <div className="cal-grid">
-              <span className="cal-day">ПН</span>
-              <span className="cal-day">ВТ</span>
-              <span className="cal-day">СР</span>
-              <span className="cal-day">ЧТ</span>
-              <span className="cal-day">ПТ</span>
-              <span className="cal-day">СБ</span>
-              <span className="cal-day">ВС</span>
-              <span className="empty"></span>
-              <span className="empty"></span>
-              <span>1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-              <span>5</span>
-              <span>6</span>
-              <span>7</span>
-              <span>8</span>
-              <span>9</span>
-              <span>10</span>
-              <span>11</span>
-              <span>12</span>
-              <span>13</span>
-              <span>14</span>
-              <span>15</span>
-              <span>16</span>
-              <span>17</span>
-              <span>18</span>
-              <span>19</span>
-              <span>20</span>
-              <span>21</span>
-              <span>22</span>
-              <span>23</span>
-              <span>24</span>
-              <span className="highlight">25</span>
-              <span>26</span>
-              <span>27</span>
-              <span>28</span>
-              <span>29</span>
-              <span>30</span>
-              <span>31</span>
-            </div>
-          </div>
-        </ScrollFade>
-      </section>
-
-      {/* LOCATION SECTION */}
-      <section className="location-section">
-        <ScrollFade>
-          <div className="loc-title">Локация</div>
-          <div className="loc-sub">
-            НАША СВАДЬБА
-            <br />
-            ПРОЙДЁТ В
-          </div>
-
-          <div className="main-card">
-            <img
-              src="/images/4.png"
-              alt="Location main"
-              className="main-photo"
-            />
-            <div className="loc-name">«ИЗ-ЗА ЛЮБВИ»</div>
-            <div className="loc-addr">
-              Адрес: Подольский район, п. Быково,
-              <br />
-              Луговая 17
-            </div>
-          </div>
-
-          <div className="thumbs">
-            <img src="/images/5.jpg" alt="Thumb 1" className="thumb" />
-            <img src="/images/6.jpg" alt="Thumb 2" className="thumb" />
-          </div>
-
-          <button className="loc-btn" onClick={onClick}>
-            <span className="btn-text">Как добраться</span>
-          </button>
-        </ScrollFade>
-      </section>
-
-      {/* TIMELINE SECTION */}
-      <section className="timeline-section">
-        <ScrollFade>
-          <div className="tl-head">ТАЙМИНГ</div>
-          <div className="tl-axis"></div>
-
-          {/* Step 1 */}
-          <div className="tl-time t1">12:30</div>
-          <div className="tl-icon i1">
-            <MapPin size={24} color="#4B4F58" />
-          </div>
-          <div className="tl-sub s1">We Meet</div>
-          <div className="tl-text d1">
-            Сбор гостей у<br />
-            ЗАГСа
-          </div>
-          <div className="tl-line hl1"></div>
-
-          {/* Step 2 */}
-          <div className="tl-time t2">13:15</div>
-          <div className="tl-icon i2">
-            <div className="rings">
-              <div className="ring1"></div>
-              <div className="ring2"></div>
-            </div>
-          </div>
-          <div className="tl-sub s2">We Do</div>
-          <div className="tl-text d2">
-            Церемония
-            <br />
-            регистрации
-          </div>
-          <div className="tl-line hl2"></div>
-
-          {/* Step 3 */}
-          <div className="tl-time t3">14:00</div>
-          <div className="tl-icon i3">
-            <ChefHat size={24} color="#4B4F58" />
-          </div>
-          <div className="tl-sub s3">We Party</div>
-          <div className="tl-text d3">Начало фуршета</div>
-          <div className="tl-line hl3"></div>
-
-          {/* Step 4 */}
-          <div className="tl-time t4">22:00</div>
-          <div className="tl-icon i4">
-            <Sparkles size={24} color="#4B4F58" />
-          </div>
-          <div className="tl-sub s4">The End</div>
-          <div className="tl-text d4">
-            Завершение
-            <br />
-            вечера
-          </div>
-          <div className="tl-line hl4"></div>
-        </ScrollFade>
-      </section>
-
-      {/* DRESS CODE SECTION */}
-      <section className="dress-code">
-        <ScrollFade>
-          <div className="dc-title">Дресс-Код</div>
-          <div className="dc-text">
-            Мы очень ждём и готовимся к нашему
-            <br />
-            незабываемому дню! Поддержите нас
-            <br />
-            Вашими улыбками и объятиями, а также
-            <br />
-            красивыми нарядами в палитре
-            <br />
-            мероприятия
-          </div>
-          <div className="palette">
-            <div style={{ backgroundColor: "#D8C5AD" }} />
-            <div style={{ backgroundColor: "#D9BFB8" }} />
-            <div style={{ backgroundColor: "#A8B295" }} />
-            <div style={{ backgroundColor: "#9A8C80" }} />
-            <div style={{ backgroundColor: "#7A5D4A" }} />
-            <div style={{ backgroundColor: "#6A6C44" }} />
-            <div style={{ backgroundColor: "#5A5046" }} />
-            <div style={{ backgroundColor: "#000000" }} />
-          </div>
-        </ScrollFade>
-      </section>
-
-      {/* WISHES SECTION */}
-      <section className="wishes">
-        <ScrollFade>
-          <div className="wish-title">Пожелания</div>
-          <div className="wish-line" />
-          <div className="wish-text">
-            Хотим, чтобы все гости могли отдохнуть
-            <br />
-            по-взрослому, поэтому говорим
-            <br />
-            заранее спасибо за понимание —<br />
-            праздник для гостей 12+.
-          </div>
-          <div className="wish-text w2">
-            Будем очень признательны, если Вы
-            <br />
-            воздержитесь от криков «Горько». Ведь
-            <br />
-            поцелуй — это знак выражения чувств, и<br />
-            он не может быть по заказу.
-          </div>
-          <div className="wish-text w3">
-            Лучшая поддержка для нас - ваши
-            <br />
-            искренние пожелания и лучезарные
-            <br />
-            улыбки, остальное можно поместить в<br />
-            конверт.
-          </div>
-        </ScrollFade>
-      </section>
-
-      {/* COUNTDOWN SECTION - Node ID: 14FYO containing gbWRC */}
-      <section className="countdown">
-        <ScrollFade>
-          <div className="cd-title">
-            ДО НАШЕЙ
-            <br />
-            СВАДЬБЫ ОСТАЛОСЬ
-          </div>
-          <div className="cd-paper gbWRC">
-            <div className="paper-top-line" />
-            <div className="cd-vals kEqpg">
-              <div className="cd-group">
-                <span className="cd-val">{timeLeft.days}</span>
-                <span className="cd-label">дни</span>
-              </div>
-              <span className="cd-sep">:</span>
-              <div className="cd-group">
-                <span className="cd-val">{timeLeft.hours}</span>
-                <span className="cd-label">часы</span>
-              </div>
-              <span className="cd-sep">:</span>
-              <div className="cd-group">
-                <span className="cd-val">{timeLeft.minutes}</span>
-                <span className="cd-label">минуты</span>
-              </div>
-              <span className="cd-sep">:</span>
-              <div className="cd-group">
-                <span className="cd-val">{timeLeft.seconds}</span>
-                <span className="cd-label">сек</span>
-              </div>
-            </div>
-            <div className="paper-bottom-line" />
-          </div>
-        </ScrollFade>
-      </section>
-
-      {/* RSVP TOP */}
-      <section className="rsvp-top">
-        <ScrollFade>
-          <div
-            style={{ position: "relative", width: "390px", height: "422px" }}
+      <AnimatePresence mode="wait">
+        {!entered ? (
+          <motion.section
+            key="preview"
+            className="preview-screen-minimal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.008 }}
+            transition={{
+              duration: prefersReducedMotion ? 0.2 : 0.55,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
-            <div className="rsvp-t1">БУДЕМ РАДЫ ВИДЕТЬ</div>
-            <div className="rsvp-t2">Вас</div>
-            <div className="rsvp-t3">
-              Пожалуйста, подтвердите ваше
-              <br />
-              присутствие на нашей свадьбе до:
-            </div>
+            <motion.div
+              className="preview-ambient preview-ambient-one"
+              animate={
+                prefersReducedMotion ? undefined : { x: [0, 16, 0], y: [0, -14, 0] }
+              }
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="preview-ambient preview-ambient-two"
+              animate={
+                prefersReducedMotion ? undefined : { x: [0, -18, 0], y: [0, 10, 0] }
+              }
+              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="preview-ambient preview-ambient-three"
+              animate={
+                prefersReducedMotion
+                  ? undefined
+                  : { y: [0, -10, 0], opacity: [0.32, 0.48, 0.32] }
+              }
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <div className="preview-grain" />
 
-            <div className="rsvp-date-row">
-              <div className="rsvp-line" />
-              <div className="rsvp-date-big">01.06.2026</div>
-              <div className="rsvp-line" />
-            </div>
-          </div>
-        </ScrollFade>
-      </section>
-
-      {/* RSVP FORM */}
-      <section className="rsvp-form-wrapper">
-        <ScrollFade>
-          {isSuccess ? (
-            <div
-              className="new-form"
-              style={{ textAlign: "center", padding: "40px 20px" }}
+            <motion.div
+              className="preview-text-stage"
+              initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: prefersReducedMotion ? 0.2 : 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
-              <div style={{ fontSize: "48px", marginBottom: "20px" }}>💌</div>
-              <div
-                className="f-label"
-                style={{ fontSize: "24px", color: "#c6215d" }}
+              <motion.button
+                className="preview-text-button"
+                onClick={handleEnterInvitation}
+                disabled={!fontsReady}
+                aria-busy={!fontsReady}
+                whileHover={prefersReducedMotion ? undefined : { y: -2 }}
+                whileTap={prefersReducedMotion ? undefined : { scale: 0.985 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
               >
-                Анкета отправлена!
-              </div>
-              <div className="f-label" style={{ marginTop: "10px" }}>
-                Спасибо за ваш ответ, мы очень ждем нашей встречи!
-              </div>
-            </div>
-          ) : (
-            <form className="new-form" onSubmit={handleSubmit}>
-              <div className="f-label">Ваше имя и фамилия *</div>
-              <input
-                className="f-input"
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-              />
-
-              <div className="f-label">Планируете ли Вы присутствовать?</div>
-              <label className="f-opt">
-                <input
-                  type="radio"
-                  name="att"
-                  checked={formData.attendance === "yes"}
-                  onChange={() =>
-                    setFormData({ ...formData, attendance: "yes" })
-                  }
-                />{" "}
-                Да, с удовольствием
-              </label>
-              <label className="f-opt">
-                <input
-                  type="radio"
-                  name="att"
-                  checked={formData.attendance === "no"}
-                  onChange={() =>
-                    setFormData({ ...formData, attendance: "no" })
-                  }
-                />{" "}
-                К сожалению, нет
-              </label>
-
-              {formData.attendance === "yes" && (
-                <>
-                  <div className="f-label">
-                    Если Вы будете со своей парой, укажите его/ее имя и фамилию
-                  </div>
-                  <input
-                    className="f-input"
-                    type="text"
-                    value={formData.pairName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, pairName: e.target.value })
-                    }
-                  />
-
-                  <div className="f-label">Ваши предпочтения из напитков</div>
-                  <div className="f-checks">
-                    {[
-                      "Шампанское",
-                      "Вино",
-                      "Джин",
-                      "Виски",
-                      "Коньяк",
-                      "Водка",
-                      "Не буду пить",
-                      "*Свой вариант ответа",
-                    ].map((drink) => (
-                      <label
-                        className="f-check"
-                        key={drink}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.drinks.includes(drink)}
-                          onChange={() => handleDrinkChange(drink)}
-                        />
-                        {drink}
-                        {drink === "Не буду пить" &&
-                          formData.drinks.includes("Не буду пить") && (
-                            <span
-                              style={{
-                                fontSize: "20px",
-                                animation: "bounce 0.5s",
-                              }}
-                            >
-                              🤡
-                            </span>
-                          )}
-                      </label>
-                    ))}
-                  </div>
-                  {formData.drinks.includes("*Свой вариант ответа") && (
-                    <input
-                      className="f-input"
-                      type="text"
-                      placeholder="Напишите ваш напиток..."
-                      value={formData.customDrink}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          customDrink: e.target.value,
-                        })
-                      }
-                      style={{ marginTop: "8px" }}
-                    />
-                  )}
-                </>
-              )}
-
-              {errorMsg && (
-                <div
-                  style={{
-                    color: "red",
-                    marginTop: "10px",
-                    fontSize: "14px",
-                    textAlign: "center",
+                <motion.span
+                  className="preview-text-button-label"
+                  initial={{ y: prefersReducedMotion ? 0 : "115%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{
+                    duration: prefersReducedMotion ? 0.2 : 0.85,
+                    delay: prefersReducedMotion ? 0 : 0.12,
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                 >
-                  {errorMsg}
-                </div>
-              )}
+                  Открыть приглашение
+                </motion.span>
+              </motion.button>
+            </motion.div>
+          </motion.section>
+        ) : (
+          <motion.div
+            key="main"
+            className="site-shell"
+            initial={{ opacity: 0, y: prefersReducedMotion ? 0 : 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: prefersReducedMotion ? 0.2 : 0.45,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
+            <button className="sound-chip" onClick={handleSoundToggle} type="button">
+              <Music2 size={14} />
+              {soundState === "playing"
+                ? "Музыка играет"
+                : soundState === "blocked"
+                  ? "Включить звук"
+                  : "Музыка"}
+            </button>
 
-              <button
-                className="f-submit"
-                type="submit"
-                disabled={isSubmitting}
-                style={{ opacity: isSubmitting ? 0.7 : 1 }}
+            <div className="mobile-layout">
+              <section className="hero">
+                <img src="/images/3.png" alt="Hero top" className="hero-img" />
+                <h2 className="hero-title">наконец-то</h2>
+                <h1 className="hero-names">МЫ ЖЕНИМСЯ</h1>
+
+                <div className="absolute-girl-text">- давай (хихик)</div>
+                <img src="/images/2.png" alt="girl" className="absolute-girl-img" />
+
+                <div className="absolute-boy-text">
+                  - малышка, тебе винду
+                  <br />
+                  переустановить ?
+                </div>
+                <img
+                  src="/images/1.png"
+                  alt="boy"
+                  className="absolute-boy-img boy-flip"
+                />
+              </section>
+
+              <motion.div
+                className="new-bar"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
               >
-                {isSubmitting ? "Отправляем..." : "Отправить"}
-              </button>
-            </form>
-          )}
-        </ScrollFade>
-      </section>
+                {INVITATION_LINES.map((line, index) => (
+                  <span className={`inv-${index + 1}`} key={`${line}-${index}`}>
+                    {line}
+                  </span>
+                ))}
+              </motion.div>
+
+              <section className="date-section">
+                <ScrollFade>
+                  <div className="date-title">МЫ ЖДЁМ</div>
+                  <div className="date-month">Вас</div>
+                  <div className="date-row">
+                    <div className="date-big">25.07.2026</div>
+                  </div>
+                  <div className="new-cal">
+                    <div className="cal-month">Июль</div>
+                    <div className="cal-grid">
+                      {CALENDAR_WEEK_DAYS.map((day) => (
+                        <span className="cal-day" key={day}>
+                          {day}
+                        </span>
+                      ))}
+                      {CALENDAR_DAYS.map((day, index) =>
+                        day ? (
+                          <span
+                            className={day === "25" ? "highlight" : undefined}
+                            key={`${day}-${index}`}
+                          >
+                            {day}
+                          </span>
+                        ) : (
+                          <span className="empty" key={`empty-${index}`} />
+                        ),
+                      )}
+                    </div>
+                  </div>
+                </ScrollFade>
+              </section>
+
+              <section className="location-section">
+                <ScrollFade>
+                  <div className="loc-title">Локация</div>
+                  <div className="loc-sub">
+                    НАША СВАДЬБА
+                    <br />
+                    ПРОЙДЁТ В
+                  </div>
+
+                  <div className="main-card">
+                    <img
+                      src="/images/4.png"
+                      alt="Location main"
+                      className="main-photo"
+                    />
+                    <div className="loc-name">«ИЗ-ЗА ЛЮБВИ»</div>
+                    <div className="loc-addr">
+                      Адрес: Подольский район, п. Быково,
+                      <br />
+                      Луговая 17
+                    </div>
+                  </div>
+
+                  <div className="thumbs">
+                    <img src="/images/5.jpg" alt="Thumb 1" className="thumb" />
+                    <img src="/images/6.jpg" alt="Thumb 2" className="thumb" />
+                  </div>
+
+                  <button className="loc-btn" onClick={openLocation} type="button">
+                    <span className="btn-text">Как добраться</span>
+                  </button>
+                </ScrollFade>
+              </section>
+
+              <section className="timeline-section">
+                <ScrollFade>
+                  <div className="tl-head">ТАЙМИНГ</div>
+                  <div className="tl-axis" />
+
+                  {TIMELINE_ITEMS.map((item) => (
+                    <div key={item.time}>
+                      <div className={`tl-time ${item.timeClassName}`}>{item.time}</div>
+                      <div className={`tl-icon ${item.iconClassName}`}>{item.icon}</div>
+                      <div className={`tl-sub ${item.subtitleClassName}`}>
+                        {item.label}
+                      </div>
+                      <div className={`tl-text ${item.descriptionClassName}`}>
+                        {item.description}
+                      </div>
+                      <div className={`tl-line ${item.lineClassName}`} />
+                    </div>
+                  ))}
+                </ScrollFade>
+              </section>
+
+              <section className="dress-code">
+                <ScrollFade>
+                  <div className="dc-title">Дресс-Код</div>
+                  <div className="dc-text">
+                    Мы очень ждём и готовимся к нашему
+                    <br />
+                    незабываемому дню. Поддержите нас
+                    <br />
+                    вашими улыбками и объятиями, а также
+                    <br />
+                    красивыми нарядами в палитре
+                    <br />
+                    мероприятия
+                  </div>
+                  <div className="palette">
+                    {PALETTE_COLORS.map((color) => (
+                      <div key={color} style={{ backgroundColor: color }} />
+                    ))}
+                  </div>
+                </ScrollFade>
+              </section>
+
+              <section className="wishes">
+                <ScrollFade>
+                  <div className="wish-title">Пожелания</div>
+                  <div className="wish-line" />
+                  {WISHES.map((wish, index) => (
+                    <div
+                      className={`wish-text${index > 0 ? ` w${index + 1}` : ""}`}
+                      key={index}
+                    >
+                      {wish}
+                    </div>
+                  ))}
+                </ScrollFade>
+              </section>
+
+              <section className="countdown">
+                <ScrollFade>
+                  <div className="cd-title">
+                    ДО НАШЕЙ
+                    <br />
+                    СВАДЬБЫ ОСТАЛОСЬ
+                  </div>
+                  <CountdownCard />
+                </ScrollFade>
+              </section>
+
+              <section className="rsvp-top">
+                <ScrollFade>
+                  <div className="rsvp-stage">
+                    <div className="rsvp-t1">БУДЕМ РАДЫ ВИДЕТЬ</div>
+                    <div className="rsvp-t2">Вас</div>
+                    <div className="rsvp-t3">
+                      Пожалуйста, подтвердите ваше
+                      <br />
+                      присутствие на нашей свадьбе до:
+                    </div>
+
+                    <div className="rsvp-date-row">
+                      <div className="rsvp-line" />
+                      <div className="rsvp-date-big">{RSVP_DEADLINE}</div>
+                      <div className="rsvp-line" />
+                    </div>
+                  </div>
+                </ScrollFade>
+              </section>
+
+              <section className="rsvp-form-wrapper">
+                <ScrollFade>
+                  {isSuccess ? (
+                    <div className="new-form success-card">
+                      <div className="success-card-icon">Спасибо</div>
+                      <div className="f-label success-card-title">
+                        Анкета отправлена!
+                      </div>
+                      <div className="f-label success-card-text">
+                        Спасибо за ваш ответ, мы очень ждём нашей встречи!
+                      </div>
+                    </div>
+                  ) : (
+                    <form className="new-form" onSubmit={handleSubmit}>
+                      <div className="f-label">Ваше имя и фамилия *</div>
+                      <input
+                        className="f-input"
+                        type="text"
+                        value={formData.name}
+                        onChange={(event) => setField("name", event.target.value)}
+                        required
+                      />
+
+                      <div className="f-label">Планируете ли Вы присутствовать?</div>
+                      <label className="f-opt">
+                        <input
+                          type="radio"
+                          name="attendance"
+                          checked={formData.attendance === "yes"}
+                          onChange={() => setField("attendance", "yes")}
+                        />
+                        Да, с удовольствием
+                      </label>
+                      <label className="f-opt">
+                        <input
+                          type="radio"
+                          name="attendance"
+                          checked={formData.attendance === "no"}
+                          onChange={() => setField("attendance", "no")}
+                        />
+                        К сожалению, нет
+                      </label>
+
+                      {formData.attendance === "yes" && (
+                        <>
+                          <div className="f-label">Ваши предпочтения из напитков</div>
+                          <div className="f-checks">
+                            {DRINK_OPTIONS.map((drink) => (
+                              <label className="f-check" key={drink}>
+                                <input
+                                  type="checkbox"
+                                  checked={formData.drinks.includes(drink)}
+                                  onChange={() => handleDrinkToggle(drink)}
+                                />
+                                {drink}
+                                {drink === NO_ALCOHOL_OPTION &&
+                                  formData.drinks.includes(NO_ALCOHOL_OPTION) && (
+                                    <span className="drink-emoji">🤡</span>
+                                  )}
+                              </label>
+                            ))}
+                          </div>
+
+                          {formData.drinks.includes(CUSTOM_DRINK_OPTION) && (
+                            <input
+                              className="f-input custom-drink-input"
+                              type="text"
+                              placeholder="Напишите ваш напиток..."
+                              value={formData.customDrink}
+                              onChange={(event) =>
+                                setField("customDrink", event.target.value)
+                              }
+                            />
+                          )}
+                        </>
+                      )}
+
+                      {errorMsg && <div className="form-error">{errorMsg}</div>}
+
+                      <button
+                        className="f-submit"
+                        type="submit"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Отправляем..." : "Отправить"}
+                      </button>
+                    </form>
+                  )}
+                </ScrollFade>
+              </section>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
