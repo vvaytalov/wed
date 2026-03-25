@@ -862,14 +862,50 @@ export default function App() {
               <section className="rsvp-form-wrapper">
                 <ScrollFade>
                   {isSuccess ? (
-                    <div className="new-form success-card">
-                      <div className="success-card-icon">Спасибо</div>
-                      <div className="f-label success-card-title">
-                        Анкета отправлена!
+                    <div className="success-scene">
+                      <motion.img
+                        src="/images/ken.png"
+                        alt=""
+                        aria-hidden="true"
+                        className="success-figure success-figure-left"
+                        initial={
+                          prefersReducedMotion
+                            ? { opacity: 1, x: 0 }
+                            : { opacity: 0, x: -88, scale: 0.94 }
+                        }
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{
+                          duration: prefersReducedMotion ? 0.2 : 0.7,
+                          delay: prefersReducedMotion ? 0 : 0.1,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      />
+                      <div className="new-form success-card">
+                        <div className="success-card-icon">Спасибо</div>
+                        <div className="f-label success-card-title">
+                          Анкета отправлена!
+                        </div>
+                        <div className="f-label success-card-text">
+                          Спасибо за ваш ответ, мы очень ждём нашей встречи!
+                        </div>
                       </div>
-                      <div className="f-label success-card-text">
-                        Спасибо за ваш ответ, мы очень ждём нашей встречи!
-                      </div>
+                      <motion.img
+                        src="/images/barby.png"
+                        alt=""
+                        aria-hidden="true"
+                        className="success-figure success-figure-right"
+                        initial={
+                          prefersReducedMotion
+                            ? { opacity: 1, x: 0 }
+                            : { opacity: 0, x: 88, scale: 0.94 }
+                        }
+                        animate={{ opacity: 1, x: 0, scale: 1 }}
+                        transition={{
+                          duration: prefersReducedMotion ? 0.2 : 0.7,
+                          delay: prefersReducedMotion ? 0 : 0.16,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                      />
                     </div>
                   ) : (
                     <form className="new-form" onSubmit={handleSubmit}>

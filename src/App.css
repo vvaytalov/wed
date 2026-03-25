@@ -995,7 +995,8 @@
 
 .rsvp-form-wrapper {
   background-color: #fcfae1;
-  padding: 24px;
+  padding: 24px 16px 42px;
+  overflow: hidden;
 }
 
 .new-form {
@@ -1012,9 +1013,27 @@
   border: 1px solid rgba(198, 33, 93, 0.1);
 }
 
+.success-scene {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 100%;
+  min-height: 360px;
+  padding: 12px 0 0;
+}
+
 .success-card {
+  position: relative;
+  z-index: 2;
   text-align: center;
-  padding: 40px 20px;
+  width: min(100%, 312px);
+  min-height: 268px;
+  padding: 44px 28px 36px;
+  border-radius: 28px;
+  box-shadow:
+    0 0 32px rgba(252, 250, 225, 0.95),
+    0 14px 34px rgba(198, 33, 93, 0.08);
 }
 
 .success-card-icon {
@@ -1031,6 +1050,24 @@
 
 .success-card-text {
   margin-top: 10px;
+}
+
+.success-figure {
+  position: absolute;
+  bottom: -42px;
+  z-index: 3;
+  width: clamp(104px, 30vw, 180px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.success-figure-left {
+  left: -70px;
+}
+
+.success-figure-right {
+  right: -70px;
 }
 
 .f-label {
@@ -1154,5 +1191,32 @@
 @media (max-width: 768px) {
   .mobile-layout {
     max-width: none;
+  }
+
+  .success-figure {
+    width: clamp(126px, 52vw, 220px);
+  }
+
+  .success-figure-left {
+    left: -84px;
+  }
+
+  .success-figure-right {
+    right: -84px;
+  }
+}
+
+@media (max-width: 360px) {
+  .success-scene {
+    min-height: 330px;
+  }
+
+  .success-card {
+    width: min(100%, 280px);
+    padding: 38px 22px 32px;
+  }
+
+  .success-figure {
+    width: 116px;
   }
 }
