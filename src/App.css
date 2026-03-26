@@ -78,8 +78,16 @@
   place-items: center;
   padding: 24px;
   background:
-    radial-gradient(circle at 20% 20%, rgba(198, 33, 93, 0.15), transparent 28%),
-    radial-gradient(circle at 80% 78%, rgba(216, 191, 184, 0.2), transparent 24%),
+    radial-gradient(
+      circle at 20% 20%,
+      rgba(198, 33, 93, 0.15),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 80% 78%,
+      rgba(216, 191, 184, 0.2),
+      transparent 24%
+    ),
     linear-gradient(180deg, #fcfae1 0%, #fdf5ea 100%);
 }
 
@@ -127,8 +135,12 @@
   background-image:
     radial-gradient(rgba(28, 21, 17, 0.75) 0.45px, transparent 0.45px),
     radial-gradient(rgba(28, 21, 17, 0.48) 0.45px, transparent 0.45px);
-  background-size: 22px 22px, 28px 28px;
-  background-position: 0 0, 10px 12px;
+  background-size:
+    22px 22px,
+    28px 28px;
+  background-position:
+    0 0,
+    10px 12px;
 }
 
 .preview-text-button {
@@ -299,7 +311,7 @@
 .absolute-boy-img {
   position: absolute;
   top: 407px;
-  left: -20px;
+  left: 8px;
   width: 320px;
   height: auto;
   z-index: 10;
@@ -795,7 +807,7 @@
   padding: 0 16px;
 }
 
-.palette>div {
+.palette > div {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -803,7 +815,7 @@
   transition: transform 0.3s ease;
 }
 
-.palette>div:hover {
+.palette > div:hover {
   transform: scale(1.15);
 }
 
@@ -1178,7 +1190,6 @@
 }
 
 @keyframes bounce {
-
   0%,
   100% {
     transform: translateY(0);
@@ -1249,6 +1260,17 @@
   .absolute-boy-img {
     left: -26px;
     width: min(84vw, 300px);
+  }
+}
+
+@media (max-width: 429px) {
+  .absolute-girl-img {
+    top: 343px;
+  }
+
+  .absolute-boy-img {
+    top: 424px;
+    left: 0;
   }
 }
 
