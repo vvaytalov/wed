@@ -78,11 +78,8 @@ const DRINK_OPTIONS = [
 const PALETTE_COLORS = [
   "#D8C5AD",
   "#D9BFB8",
-  "#A8B295",
-  "#9A8C80",
-  "#7A5D4A",
-  "#6A6C44",
-  "#5A5046",
+  "#e173b0",
+  "#fdff90",
   "#000000",
 ];
 const WISHES = [
