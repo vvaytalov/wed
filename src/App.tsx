@@ -77,6 +77,8 @@ const DRINK_OPTIONS = [
 ];
 const PALETTE_COLORS = [
   "#D8C5AD",
+  "#bfc6a5",
+  "#b9cada",
   "#D9BFB8",
   "#e173b0",
   "#fdff90",
