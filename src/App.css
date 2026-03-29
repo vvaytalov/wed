@@ -596,7 +596,7 @@
 
 .timeline-section {
   position: relative;
-  height: 626px;
+  height: 470px;
   background-color: #fcfae1;
 }
 
@@ -612,10 +612,10 @@
 
 .tl-axis {
   position: absolute;
-  top: 158px;
+  top: 206px;
   left: 86px;
   width: 1px;
-  height: 430px;
+  height: 182px;
   background-color: #c6215d;
 }
 
@@ -731,48 +731,48 @@
 }
 
 .t3 {
-  top: 429px;
+  top: 237px;
 }
 
 .i3 {
-  top: 432px;
+  top: 239px;
 }
 
 .s3 {
-  top: 416px;
+  top: 224px;
   left: 162px;
 }
 
 .d3 {
-  top: 446px;
+  top: 254px;
   left: 150px;
 }
 
 .hl3 {
-  top: 441px;
+  top: 249px;
   left: 152px;
 }
 
 .t4 {
-  top: 539px;
+  top: 346px;
 }
 
 .i4 {
-  top: 540px;
+  top: 348px;
 }
 
 .s4 {
-  top: 524px;
+  top: 332px;
   left: 158px;
 }
 
 .d4 {
-  top: 556px;
+  top: 364px;
   left: 150px;
 }
 
 .hl4 {
-  top: 551px;
+  top: 359px;
   left: 152px;
   background-color: #71757e;
 }

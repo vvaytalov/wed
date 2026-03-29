@@ -1,7 +1,7 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ChefHat, MapPin, Music2, Sparkles } from "lucide-react";
+import { ChefHat, Music2, Sparkles } from "lucide-react";
 import "./App.css";
 
 type Attendance = "yes" | "no";
@@ -151,45 +151,6 @@ const CALENDAR_DAYS = [
 ];
 
 const TIMELINE_ITEMS: TimelineItem[] = [
-  {
-    time: "12:30",
-    label: "We Meet",
-    description: (
-      <>
-        Сбор гостей у
-        <br />
-        ЗАГСа
-      </>
-    ),
-    icon: <MapPin size={24} color="#4B4F58" />,
-    timeClassName: "t1",
-    iconClassName: "i1",
-    subtitleClassName: "s1",
-    descriptionClassName: "d1",
-    lineClassName: "hl1",
-  },
-  {
-    time: "13:15",
-    label: "We Do",
-    description: (
-      <>
-        Церемония
-        <br />
-        регистрации
-      </>
-    ),
-    icon: (
-      <div className="rings">
-        <div className="ring1" />
-        <div className="ring2" />
-      </div>
-    ),
-    timeClassName: "t2",
-    iconClassName: "i2",
-    subtitleClassName: "s2",
-    descriptionClassName: "d2",
-    lineClassName: "hl2",
-  },
   {
     time: "14:00",
     label: "We Party",
